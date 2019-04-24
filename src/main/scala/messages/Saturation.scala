@@ -1,4 +1,4 @@
 package messages
 
-case object IsSaturated
-case object IsUnsaturated
+case class IsSaturated()
+case class IsUnsaturated()

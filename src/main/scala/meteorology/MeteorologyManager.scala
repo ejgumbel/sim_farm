@@ -11,17 +11,14 @@ class MeteorologyManager extends Actor {
 
   def receive = {
     case TimeTick(time) => {
-      println("Got to meteorology manager")
-      sender ! computeTotalDepth(time)
+      context.parent ! computeTotalDepth(time)
     }
     case _ => {
-      println("wtf")
-      sender ! computeTotalDepth(0)
+      context.parent ! computeTotalDepth(0)
     }
   }
 
   private def computeTotalDepth(time: Double): PrecipitationTimestep = {
-    println("into this function")
     PrecipitationTimestep(TimeTick(time), PrecipitationDepth(constantRate / conversion * time))
   }
 

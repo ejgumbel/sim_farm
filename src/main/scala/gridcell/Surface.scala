@@ -1,23 +1,29 @@
 package gridcell
 
 import akka.actor._
-import messages.{IsSaturated, IsUnsaturated, PrecipitationTimestep}
+import messages.{IsSaturated, IsUnsaturated, PrecipitationTimestep, TimestepResult}
 
 class Surface(infiltrationRate: Double) extends Actor {
   import context._
 
   def saturatedState: Receive = {
-    case PrecipitationTimestep =>
-      println("I am saturated.")
+    case pts: PrecipitationTimestep =>
+      context.parent ! TimestepResult("Saturated Result")
   }
 
   def unsaturatedState: Receive = {
-    case PrecipitationTimestep =>
-      println("I am unsaturated.")
+    case pts: PrecipitationTimestep =>
+      context.parent ! TimestepResult("Unsaturated Result")
   }
 
   def receive = {
-    case IsSaturated => become(saturatedState)
-    case IsUnsaturated => become(unsaturatedState)
+    case IsSaturated => {
+      become(saturatedState)
+      println("became saturated")
+    }
+    case IsUnsaturated => {
+      become(unsaturatedState)
+      println("became unsaturated")
+    }
   }
 }
